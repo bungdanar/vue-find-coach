@@ -1,7 +1,10 @@
 <script>
 import { defineComponent } from 'vue'
+import BaseButton from '../ui/BaseButton.vue'
+import BaseBadge from '../ui/BaseBadge.vue'
 
 export default defineComponent({
+  components: { BaseButton, BaseBadge },
   props: ['id', 'firstName', 'lastName', 'rate', 'areas'],
   computed: {
     fullName() {
@@ -22,11 +25,11 @@ export default defineComponent({
     <h3>{{ fullName }}</h3>
     <h4>${{ rate }}/hour</h4>
     <div>
-      <span v-for="area in areas" :key="area">{{ area }}</span>
+      <BaseBadge v-for="area in areas" :key="area" :type="area" :title="area"></BaseBadge>
     </div>
-    <div class="action">
-      <RouterLink :to="coachContactLink">Contact</RouterLink>
-      <RouterLink :to="coachDetailstLink">View Details</RouterLink>
+    <div class="actions">
+      <BaseButton mode="outline" link :to="coachContactLink">Contact</BaseButton>
+      <BaseButton link :to="coachDetailstLink">View Details</BaseButton>
     </div>
   </li>
 </template>
