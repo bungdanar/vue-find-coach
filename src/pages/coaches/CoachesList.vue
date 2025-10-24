@@ -29,6 +29,9 @@ export default defineComponent({
     hasCoaches() {
       return this.$store.getters['coaches/hasCoaches']
     },
+    isCoach() {
+      return this.$store.getters['coaches/isCoach']
+    },
   },
   data() {
     return {
@@ -55,7 +58,7 @@ export default defineComponent({
     <BaseCard>
       <div class="controls">
         <BaseButton mode="outline">Refresh</BaseButton>
-        <BaseButton :link="true" to="/register">Register as Coach</BaseButton>
+        <BaseButton v-if="!isCoach" :link="true" to="/register">Register as Coach</BaseButton>
       </div>
       <ul v-if="hasCoaches">
         <CoachItem
