@@ -72,26 +72,28 @@ export default defineComponent({
 </script>
 
 <template>
-  <BaseDialog :show="!!error" title="An error occurred" @close="handleError">
-    <p>{{ error }}</p>
-  </BaseDialog>
-  <section>
-    <CoachFilter @change-filter="setFilters" />
-  </section>
-  <section>
-    <BaseCard>
-      <div class="controls">
-        <BaseButton mode="outline" @click="loadCoaches(true)">Refresh</BaseButton>
-        <BaseButton v-if="!isCoach && !isLoading" :link="true" to="/register">Register as Coach</BaseButton>
-      </div>
-      <BaseSpinner v-if="isLoading"></BaseSpinner>
-      <ul v-else-if="hasCoaches">
-        <CoachItem v-for="coach in filteredCoaches" :key="coach.id" :id="coach.id" :first-name="coach.firstName"
-          :last-name="coach.lastName" :rate="coach.hourlyRate" :areas="coach.areas" />
-      </ul>
-      <h3 v-else>No coaches found.</h3>
-    </BaseCard>
-  </section>
+  <div>
+    <BaseDialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+    <section>
+      <CoachFilter @change-filter="setFilters" />
+    </section>
+    <section>
+      <BaseCard>
+        <div class="controls">
+          <BaseButton mode="outline" @click="loadCoaches(true)">Refresh</BaseButton>
+          <BaseButton v-if="!isCoach && !isLoading" :link="true" to="/register">Register as Coach</BaseButton>
+        </div>
+        <BaseSpinner v-if="isLoading"></BaseSpinner>
+        <ul v-else-if="hasCoaches">
+          <CoachItem v-for="coach in filteredCoaches" :key="coach.id" :id="coach.id" :first-name="coach.firstName"
+            :last-name="coach.lastName" :rate="coach.hourlyRate" :areas="coach.areas" />
+        </ul>
+        <h3 v-else>No coaches found.</h3>
+      </BaseCard>
+    </section>
+  </div>
 </template>
 
 <style scoped>
