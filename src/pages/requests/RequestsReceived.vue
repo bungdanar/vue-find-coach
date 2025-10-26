@@ -1,11 +1,19 @@
 <script>
 import RequestItem from "@/components/requests/RequestItem.vue";
 import BaseCard from "@/components/ui/BaseCard.vue";
+import BaseDialog from "@/components/ui/BaseDialog.vue";
+import BaseSpinner from "@/components/ui/BaseSpinner.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
-    BaseCard, RequestItem
+    BaseCard, RequestItem, BaseDialog, BaseSpinner
+  },
+  data() {
+    return {
+      isLoading: false,
+      error: null
+    }
   },
   computed: {
     receivedRequests() {
@@ -14,17 +22,40 @@ export default defineComponent({
     hasRequests() {
       return this.$store.getters['requests/hasRequests']
     }
+  },
+  methods: {
+    async loadRequests() {
+      this.isLoading = true
+
+      try {
+        await this.$store.dispatch('requests/fetchRequests')
+      } catch (error) {
+        this.error = error.message || 'Something failed!'
+      }
+
+      this.isLoading = false
+    },
+    handleError() {
+      this.error = null
+    }
+  },
+  created() {
+    this.loadRequests()
   }
 })
 </script>
 
 <template>
+  <BaseDialog :show="!!error" title="An error occurred" @close="handleError">
+    <p>{{ error }}</p>
+  </BaseDialog>
   <section>
     <BaseCard>
       <header>
         <h2>Requests Received</h2>
       </header>
-      <ul v-if="hasRequests">
+      <BaseSpinner v-if="isLoading"></BaseSpinner>
+      <ul v-else-if="hasRequests && !isLoading">
         <RequestItem v-for="req in receivedRequests" :key="req.id" :email="req.userEmail" :message="req.message">
         </RequestItem>
       </ul>

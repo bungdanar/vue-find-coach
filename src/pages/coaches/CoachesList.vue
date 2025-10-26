@@ -50,11 +50,11 @@ export default defineComponent({
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters
     },
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       this.isLoading = true
 
       try {
-        await this.$store.dispatch('coaches/loadCoaches')
+        await this.$store.dispatch('coaches/loadCoaches', { forceRefresh: refresh })
       } catch (error) {
         this.error = error.message || 'Something went wrong'
       }
@@ -81,7 +81,7 @@ export default defineComponent({
   <section>
     <BaseCard>
       <div class="controls">
-        <BaseButton mode="outline" @click="loadCoaches">Refresh</BaseButton>
+        <BaseButton mode="outline" @click="loadCoaches(true)">Refresh</BaseButton>
         <BaseButton v-if="!isCoach && !isLoading" :link="true" to="/register">Register as Coach</BaseButton>
       </div>
       <BaseSpinner v-if="isLoading"></BaseSpinner>
