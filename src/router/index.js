@@ -1,3 +1,4 @@
+import UserAuth from '@/pages/auth/UserAuth.vue'
 import CoachDetail from '@/pages/coaches/CoachDetail.vue'
 import CoachesList from '@/pages/coaches/CoachesList.vue'
 import CoachRegistration from '@/pages/coaches/CoachRegistration.vue'
@@ -35,6 +36,10 @@ const router = createRouter({
     {
       path: '/requests',
       component: RequestsReceived,
+    },
+    {
+      path: '/auth',
+      component: UserAuth,
     },
     {
       path: '/:notFound(.*)',
