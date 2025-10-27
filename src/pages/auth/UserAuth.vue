@@ -22,12 +22,21 @@ export default defineComponent({
     }
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       this.formIsValid = true
 
       if (this.email === '' || !this.email.includes('@') || this.password.length < 6) {
         this.formIsValid = false
         return
+      }
+
+      if (this.mode === 'login') {
+        // PASS
+      } else {
+        await this.$store.dispatch('signup', {
+          email: this.email,
+          password: this.password
+        })
       }
     },
     switchAuthModel() {
