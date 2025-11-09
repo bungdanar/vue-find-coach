@@ -1,16 +1,20 @@
 <script>
 import BaseButton from "@/components/ui/BaseButton.vue";
 import BaseCard from "@/components/ui/BaseCard.vue";
+import BaseDialog from "@/components/ui/BaseDialog.vue";
+import BaseSpinner from "@/components/ui/BaseSpinner.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { BaseButton, BaseCard },
+  components: { BaseButton, BaseCard, BaseDialog, BaseSpinner },
   data() {
     return {
       email: '',
       password: '',
       formIsValid: true,
-      mode: 'login'
+      mode: 'login',
+      isLoading: false,
+      error: null
     }
   },
   computed: {
@@ -30,14 +34,23 @@ export default defineComponent({
         return
       }
 
-      if (this.mode === 'login') {
-        // PASS
-      } else {
-        await this.$store.dispatch('signup', {
-          email: this.email,
-          password: this.password
-        })
+      this.isLoading = true
+      const actionPayload = {
+        email: this.email,
+        password: this.password
       }
+
+      try {
+        if (this.mode === 'login') {
+          await this.$store.dispatch('login', actionPayload)
+        } else {
+          await this.$store.dispatch('signup', actionPayload)
+        }
+      } catch (error) {
+        this.error = error.message || 'Failed to authenticate'
+      }
+
+      this.isLoading = false
     },
     switchAuthModel() {
       if (this.mode === 'login') {
@@ -45,27 +58,38 @@ export default defineComponent({
       } else {
         this.mode = 'login'
       }
+    },
+    handleError() {
+      this.error = null
     }
   }
 })
 </script>
 
 <template>
-  <BaseCard>
-    <form @submit.prevent="submitForm">
-      <div class="form-control">
-        <label for="email">E-Mail</label>
-        <input type="email" id="email" v-model.trim="email">
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model.trim="password">
-      </div>
-      <p v-if="!formIsValid">Please enter valid form inputs</p>
-      <BaseButton>{{ submitBtnCaption }}</BaseButton>
-      <BaseButton mode="flat" type="button" @click="switchAuthModel">{{ switctModeBtnCaption }}</BaseButton>
-    </form>
-  </BaseCard>
+  <div>
+    <BaseDialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+    <BaseDialog fixed :show="isLoading" title="Authenticating...">
+      <BaseSpinner></BaseSpinner>
+    </BaseDialog>
+    <BaseCard>
+      <form @submit.prevent="submitForm">
+        <div class="form-control">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" v-model.trim="email">
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model.trim="password">
+        </div>
+        <p v-if="!formIsValid">Please enter valid form inputs</p>
+        <BaseButton>{{ submitBtnCaption }}</BaseButton>
+        <BaseButton mode="flat" type="button" @click="switchAuthModel">{{ switctModeBtnCaption }}</BaseButton>
+      </form>
+    </BaseCard>
+  </div>
 </template>
 
 <style scoped>
