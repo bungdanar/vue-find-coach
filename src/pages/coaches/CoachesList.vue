@@ -34,6 +34,9 @@ export default defineComponent({
     isCoach() {
       return this.$store.getters['coaches/isCoach']
     },
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated
+    }
   },
   data() {
     return {
@@ -83,7 +86,9 @@ export default defineComponent({
       <BaseCard>
         <div class="controls">
           <BaseButton mode="outline" @click="loadCoaches(true)">Refresh</BaseButton>
-          <BaseButton v-if="!isCoach && !isLoading" :link="true" to="/register">Register as Coach</BaseButton>
+          <BaseButton link to="/auth" v-if="!isLoggedIn">Login</BaseButton>
+          <BaseButton v-if="isLoggedIn && !isCoach && !isLoading" :link="true" to="/register">Register as Coach
+          </BaseButton>
         </div>
         <BaseSpinner v-if="isLoading"></BaseSpinner>
         <ul v-else-if="hasCoaches">
