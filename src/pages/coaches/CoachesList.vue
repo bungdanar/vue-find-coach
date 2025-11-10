@@ -86,7 +86,7 @@ export default defineComponent({
       <BaseCard>
         <div class="controls">
           <BaseButton mode="outline" @click="loadCoaches(true)">Refresh</BaseButton>
-          <BaseButton link to="/auth" v-if="!isLoggedIn">Login</BaseButton>
+          <BaseButton link to="/auth?redirect=register" v-if="!isLoggedIn">Login to Register as Coach</BaseButton>
           <BaseButton v-if="isLoggedIn && !isCoach && !isLoading" :link="true" to="/register">Register as Coach
           </BaseButton>
         </div>
