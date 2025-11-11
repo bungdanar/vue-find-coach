@@ -1,12 +1,23 @@
 import UserAuth from '@/pages/auth/UserAuth.vue'
-import CoachDetail from '@/pages/coaches/CoachDetail.vue'
+// import CoachDetail from '@/pages/coaches/CoachDetail.vue'
 import CoachesList from '@/pages/coaches/CoachesList.vue'
-import CoachRegistration from '@/pages/coaches/CoachRegistration.vue'
+// import CoachRegistration from '@/pages/coaches/CoachRegistration.vue'
 import NotFound from '@/pages/NotFound.vue'
 import ContactCoach from '@/pages/requests/ContactCoach.vue'
 import RequestsReceived from '@/pages/requests/RequestsReceived.vue'
 import store from '@/store'
+// import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+
+// Not recommended for routing. Async component is best for global components.
+// const CoachDetail = defineAsyncComponent(() => import('@/pages/coaches/CoachDetail.vue'))
+// const CoachRegistration = defineAsyncComponent(
+//   () => import('@/pages/coaches/CoachRegistration.vue'),
+// )
+
+// Recommended way for async routing components
+const CoachDetail = () => import('@/pages/coaches/CoachDetail.vue')
+const CoachRegistration = () => import('@/pages/coaches/CoachRegistration.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
